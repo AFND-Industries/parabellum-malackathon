@@ -16,7 +16,7 @@ export default function RecevoirItemComponent(props) {
                         <h5 className="fs-6 mb-0" style={{ color: "gray" }}>{recevoir.AMBITO_NOMBRE[0] + recevoir.AMBITO_NOMBRE.toLowerCase().substring(1)}</h5>
                     </div>
                     <div className="col-12 d-flex align-items-end h-100">
-                        <button onClick={() => navigate("/recevoir", { state: recevoir })} className="btn btn-primary" style={{ fontSize: "1ch" }}>Más información</button>
+                        <button onClick={() => navigate("/recevoir", { state: { recevoir: recevoir, radius: props.radius } })} className="btn btn-primary" style={{ fontSize: "1ch" }}>Más información</button>
                     </div>
                 </div>
             </div>

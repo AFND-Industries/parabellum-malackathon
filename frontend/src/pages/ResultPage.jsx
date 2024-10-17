@@ -17,30 +17,30 @@ export default function ResultPage() {
 
     const [recevoirs, setRecevoirs] = useState(null)
     const filters = [
-            {
-                filterName: "name",
-                reachableName: "Nombre: ",
-                filterValue: name,
-                constraint: (value) => !name || name.length === 0 || value.EMBALSE.toLowerCase().includes(name.toLowerCase())
-            },
-            {
-                filterName: "capacity",
-                reachableName: "Capacidad mayor que ",
-                filterValue: capacity,
-                constraint: (value) => !capacity || Number(value.AGUA_TOTAL) >= capacity
-            },
-            {
-                filterName: "cuenca",
-                reachableName: "Cuenca: ",
-                filterValue: cuenca,
-                constraint: (value) => !cuenca || cuenca.length === 0 || value.AMBITO_NOMBRE.toLowerCase().includes(cuenca.toLowerCase())
-            },
-            {
-                filterName: "hydroelectric",
-                reachableName: "Tiene central hidroeléctrica",
-                filterValue: hydroelectric,
-                constraint: (value) => !hydroelectric || value.ELECTRICO_FLAG
-            }
+        {
+            filterName: "name",
+            reachableName: "Nombre: ",
+            filterValue: name,
+            constraint: (value) => !name || name.length === 0 || value.EMBALSE.toLowerCase().includes(name.toLowerCase())
+        },
+        {
+            filterName: "capacity",
+            reachableName: "Capacidad mayor que ",
+            filterValue: capacity,
+            constraint: (value) => !capacity || Number(value.AGUA_TOTAL) >= capacity
+        },
+        {
+            filterName: "cuenca",
+            reachableName: "Cuenca: ",
+            filterValue: cuenca,
+            constraint: (value) => !cuenca || cuenca.length === 0 || value.AMBITO_NOMBRE.toLowerCase().includes(cuenca.toLowerCase())
+        },
+        {
+            filterName: "hydroelectric",
+            reachableName: "Tiene central hidroeléctrica",
+            filterValue: hydroelectric,
+            constraint: (value) => !hydroelectric || value.ELECTRICO_FLAG
+        }
     ]
 
     const applyFilters = () => {
@@ -62,8 +62,13 @@ export default function ResultPage() {
         else fetchData();
     }, [])
 
+    const volver = () => {
+        navigate("/");
+    }
+
 
     return <>
+
         {
             recevoirs === null ?
                 <div className="text-center">
@@ -72,11 +77,20 @@ export default function ResultPage() {
                 </div>
                 :
                 recevoirs.length === 0 ?
-                    <div className="text-center">
-                        <h3>No se han encontrado embalses a {radius}km</h3>
-                    </div> :
+                    <>
+                        <div className="container">
+                            <button className="btn btn-primary" onClick={volver}>Volver</button>
+                            <div className="text-center">
+                                <h3>No se han encontrado embalses a {radius}km</h3>
+                            </div>
+                        </div>
+
+                    </>
+                    :
                     <div className="container">
+                        <button className="btn btn-primary" onClick={volver}>Volver</button>
                         <div className="row g-3">
+
                             <div className="col-12 text-center">
                                 <h3>Aquí tienes algunos embalses a {radius}km de distancia</h3>
                             </div>
@@ -91,24 +105,24 @@ export default function ResultPage() {
                                                 <span class="badge rounded-pill text-bg-primary me-2">{f.reachableName}
                                                     {
                                                         f.filterName === "hydroelectric" ?
-                                                        <input id={f.filterName + "Input"} type="checkbox" onChange={() => {setHydroelectric(!hydroelectric)}} className="form-check-input ms-2" checked={f.filterValue} />
-                                                        :
-                                                        <input id={f.filterName + "Input"} onChange={(v) => {
-                                                            switch (f.filterName) {
-                                                                case "name":
-                                                                    setName(v.target.value)
-                                                                    break;
-                                                                case "capacity":
-                                                                    setCapacity(v.target.valueAsNumber)
-                                                                    break;
-                                                                case "cuenca":
-                                                                    setCuenca(v.target.value)
-                                                                    break;
-                                                            
-                                                                default:
-                                                                    break;
-                                                            }
-                                                        }} type={f.filterName === "capacity" ? "number" : "text"} min={f.filterName === "capacity" ? 0 : ""} style={{maxWidth: "50px", border:"none", borderRadius: "5px"}} value={f.filterValue} />
+                                                            <input id={f.filterName + "Input"} type="checkbox" onChange={() => { setHydroelectric(!hydroelectric) }} className="form-check-input ms-2" checked={f.filterValue} />
+                                                            :
+                                                            <input id={f.filterName + "Input"} onChange={(v) => {
+                                                                switch (f.filterName) {
+                                                                    case "name":
+                                                                        setName(v.target.value)
+                                                                        break;
+                                                                    case "capacity":
+                                                                        setCapacity(v.target.valueAsNumber)
+                                                                        break;
+                                                                    case "cuenca":
+                                                                        setCuenca(v.target.value)
+                                                                        break;
+
+                                                                    default:
+                                                                        break;
+                                                                }
+                                                            }} type={f.filterName === "capacity" ? "number" : "text"} min={f.filterName === "capacity" ? 0 : ""} style={{ maxWidth: "50px", border: "none", borderRadius: "5px" }} value={f.filterValue} />
                                                     }
                                                 </span>
                                             </div>
@@ -116,10 +130,10 @@ export default function ResultPage() {
                                     </div>
                                 </div>
                                 <div className="d-flex">
-                                    
+
                                 </div>
                             </div>
-                            {applyFilters().map(recevoir => <RecevoirItemComponent key={recevoir.ID} recevoir={recevoir} />)}
+                            {applyFilters().map(recevoir => <RecevoirItemComponent key={recevoir.ID} radius={radius} recevoir={recevoir} />)}
                         </div>
                     </div>
         }

@@ -9,7 +9,6 @@ export default function PredictModal() {
 
     useEffect(() => {
         const pred = async (id) => {
-            console.log(id);
             const data = await getPrediccion(id);
             setPrediccion(data.data);
         }
