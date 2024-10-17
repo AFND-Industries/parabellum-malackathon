@@ -1,3 +1,4 @@
+
 # Malackathon 2024 - Gestión de Embalses Españoles
 
 ### Descripción del Reto:
@@ -82,3 +83,7 @@ El objetivo del reto Malackathon 2024, realizado el 17-18 de octubre, es diseña
 
 ## Contribuciones:
 Este proyecto fue desarrollado por los participantes del equipo durante la competición Malackathon 2024. Cada miembro contribuyó en áreas específicas como backend, frontend, y la integración con OCI.
+=======
+
+Es MUY IMPORTANTE que revisen el informe de decisiones de diseño y desarrollo, pues en él se detallan las explicaciones completas de todo el sistemas y el cumplimiento de los requisitos especificados en el reto.
+
