@@ -5,6 +5,7 @@ const { verifyCaptcha } = require('../utils/captchaVerification');
 exports.submitForm = async (req, res) => {
   try {
     const captchaToken = req.body['g-recaptcha-response'];
+    console.log("Llega aqui");
     
     // Verificamos el CAPTCHA usando la API de Google
     const captchaValid = await verifyCaptcha(captchaToken);
