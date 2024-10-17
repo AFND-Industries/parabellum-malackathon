@@ -133,41 +133,45 @@ export default function ResultPage() {
                                         <div className="card-header">
                                             Filtros utilizados
                                         </div>
-                                        <div className="card-body d-flex">
-                                            {filters.map((f) => {
-                                                return <div key={f.filterName}>
-                                                    <span className="badge rounded-pill text-bg-primary me-2">{f.reachableName}
-                                                        {
-                                                            f.filterName === "hydroelectric" ?
-                                                                <input id={f.filterName + "Input"} type="checkbox" onChange={() => { setHydroelectric(!hydroelectric) }} className="form-check-input ms-2" checked={f.filterValue} />
-                                                                :
-                                                                <input id={f.filterName + "Input"} onChange={(v) => {
-                                                                    switch (f.filterName) {
-                                                                        case "name":
-                                                                            setName(v.target.value)
-                                                                            break;
-                                                                        case "capacity":
-                                                                            setCapacity(v.target.valueAsNumber)
-                                                                            break;
-                                                                        case "cuenca":
-                                                                            setCuenca(v.target.value)
-                                                                            break;
-                                                                        default:
-                                                                            break;
-                                                                    }
-                                                                }} type={f.filterName === "capacity" ? "number" : "text"} min={f.filterName === "capacity" ? 0 : ""} style={{ maxWidth: "50px", border: "none", borderRadius: "5px" }} value={f.filterValue} />
-                                                        }
-                                                    </span>
+                                        <div className="card-body">
+                                        <div className="row g-3">
+                                        {filters.map((f) => {
+                                            return <div className="col-md-3 col-sm-6 col-12">
+                                                <div className="d-flex flex-column justify-content-center align-items-center">
+                                                {f.reachableName}
+                                                    {
+                                                        f.filterName === "hydroelectric" ?
+                                                        <input id={f.filterName + "Input"} type="checkbox" onChange={() => {setHydroelectric(!hydroelectric)}} className="form-check-input ms-2" checked={f.filterValue} />
+                                                        :
+                                                        <input id={f.filterName + "Input"} onChange={(v) => {
+                                                            switch (f.filterName) {
+                                                                case "name":
+                                                                    setName(v.target.value)
+                                                                    break;
+                                                                case "capacity":
+                                                                    setCapacity(v.target.valueAsNumber)
+                                                                    break;
+                                                                case "cuenca":
+                                                                    setCuenca(v.target.value)
+                                                                    break;
+                                                            
+                                                                default:
+                                                                    break;
+                                                            }
+                                                        }} type={f.filterName === "capacity" ? "number" : "text"} className="form-control" min={f.filterName === "capacity" ? 0 : ""} value={f.filterValue} />
+                                                    }
                                                 </div>
-                                            })}
+                                            </div>
+                                        })}
                                         </div>
+                                    </div>
                                     </div>
                                 </div>
                                 {applyFilters().map(recevoir => <RecevoirItemComponent key={recevoir.ID} radius={radius} recevoir={recevoir} />)}
                                 <div className="d-flex justify-content-center align-items-center flex-column">
-                                    <button className="btn btn-primary" onClick={fase}>Fase 5</button>
+                                    <button className="btn btn-primary mb-2" onClick={fase}>Fase 5</button>
                                     {f && <div>
-                                        {mayor.EMBALSE_NOMBRE} le pasa agua a {menor.EMBALSE_NOMBRE}
+                                        {mayor.EMBALSE} le pasa agua a {menor.EMBALSE_NOMBRE}
                                     </div>}
                                 </div>
                             </div>
