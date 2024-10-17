@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useRecevoir } from "../context/RecevoirContext";
 import RecevoirChart from "../components/RecevoirChart";
+import MapComponent from "../components/MapComponent";
 
 export default function RecevoirPage() {
     const { getAguaFromEmbalses } = useRecevoir();
@@ -109,6 +110,10 @@ export default function RecevoirPage() {
 
     return (
         <div className="container my-5">
+            <div className="row mb-4">
+                <MapComponent latitude={recevoir.X} longitude={recevoir.Y} />
+            </div>
+
             <div className="row mb-4" style={{ display: metrics.loaded ? "flex" : "none" }}>
                 <div className="col-md-4">
                     <div className="card text-white bg-secondary mb-3">

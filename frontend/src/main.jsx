@@ -2,6 +2,7 @@ import { createRoot } from "react-dom/client";
 import HomePage from "./pages/HomePage.jsx";
 import RecevoirPage from "./pages/RecevoirPage.jsx";
 import "bootstrap/dist/css/bootstrap.min.css";
+import 'leaflet/dist/leaflet.css';
 import "./index.css";
 import HeaderPage from "./components/HeaderComponent.jsx";
 import Footer from "./components/FooterComponent.jsx";
