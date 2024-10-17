@@ -93,7 +93,7 @@ export default function ResultPage() {
     const volver = () => {
         navigate("/");
     }
-    console.log(f);
+
     const mayor = f === undefined ? undefined : f.reduce((max, current) => {
         return current.MEDIA_PREDICCION > max.MEDIA_PREDICCION ? current : max;
     }, f[0]);
@@ -164,10 +164,10 @@ export default function ResultPage() {
                                     </div>
                                 </div>
                                 {applyFilters().map(recevoir => <RecevoirItemComponent key={recevoir.ID} radius={radius} recevoir={recevoir} />)}
-                                <div style={{ display: "none" }}>
+                                <div className="d-flex justify-content-center align-items-center flex-column">
                                     <button className="btn btn-primary" onClick={fase}>Fase 5</button>
                                     {f && <div>
-                                        {mayor} le pasa agua a {menor}
+                                        {mayor.EMBALSE_NOMBRE} le pasa agua a {menor.EMBALSE_NOMBRE}
                                     </div>}
                                 </div>
                             </div>
