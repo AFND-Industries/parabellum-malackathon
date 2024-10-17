@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import MapComponent from "../components/MapComponent";
+import PredictModal from "../components/PredictModa";
 
 export default function HomePage() {
     const [actualLocation, setActualLocation] = useState([36.715103, -4.477658]);

@@ -11,9 +11,11 @@ import { Routes, Route, BrowserRouter } from "react-router-dom";
 import ResultPage from "./pages/ResultPage.jsx";
 import { RecevoirProvider } from "./context/RecevoirContext.jsx";
 import ReCaptchaPage from './pages/ReCaptchaPage.jsx'
+import PredictModal from "./components/PredictModa.jsx";
 
 createRoot(document.getElementById("root")).render(
   <RecevoirProvider>
+    <PredictModal />
     <body className="app-container">
       <header>
         <HeaderPage />

@@ -5,7 +5,7 @@ import MapComponent from "../components/MapComponent";
 import { useLocation } from "react-router-dom";
 
 export default function RecevoirPage() {
-    const { getAguaFromEmbalses } = useRecevoir();
+    const { getAguaFromEmbalses, setShowPredict, showPredict } = useRecevoir();
 
     const location = useLocation();
     const recevoir = location.state;
@@ -88,9 +88,12 @@ export default function RecevoirPage() {
         fetch();
     }, []);
 
+    const predict = () => {
+        setShowPredict(recevoir.ID);
+    }
+
     return (
         <div className="container">
-
             <h1 className="text-center fw-bold">{recevoir.EMBALSE}</h1>
             <h2 className="text-center mb-5 fs-3">
                 Información sobre el embalse
@@ -173,9 +176,17 @@ export default function RecevoirPage() {
             </div>
 
             <div className="d-flex justify-content-center align-items-start flex-column">
-                <h2>Evolución del agua</h2>
+                <div className="d-flex justify-content-between align-items-center w-100">
+                    <div>
+                        <h2>Evolución del agua</h2>
+                    </div>
+                    <div>
+                        <button className="btn btn-secondary" onClick={predict}>Realizar predicción de 12 meses</button>
+                    </div>
+
+                </div>
                 <RecevoirChart aguas={aguas} />
             </div>
-        </div>
+        </div >
     );
 }
