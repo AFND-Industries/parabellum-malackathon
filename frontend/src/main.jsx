@@ -1,3 +1,4 @@
+
 import { createRoot } from "react-dom/client";
 import HomePage from "./pages/HomePage.jsx";
 import RecevoirPage from "./pages/RecevoirPage.jsx";
@@ -9,16 +10,25 @@ import Footer from "./components/FooterComponent.jsx";
 import { Routes, Route, BrowserRouter } from "react-router-dom";
 import ResultPage from "./pages/ResultPage.jsx";
 import { RecevoirProvider } from "./context/RecevoirContext.jsx";
+import ReCaptchaPage from './pages/ReCaptchaPage.jsx'
 
 createRoot(document.getElementById("root")).render(
   <RecevoirProvider>
-    <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<HomePage />} />
-        <Route path="/result" element={<ResultPage />} />
-        <Route path="/recevoir" element={<RecevoirPage />} />
-      </Routes>
-    </BrowserRouter>
-    <Footer />
+    <body className="app-container">
+      <header>
+        <HeaderPage />
+      </header>
+      <BrowserRouter>
+        <Routes>
+          <Route path="/" element={<HomePage />} />
+          <Route path="/result" element={<ResultPage />} />
+          <Route path="/recevoir" element={<RecevoirPage />} />
+          <Route path='/recaptcha' element={<ReCaptchaPage />} />
+        </Routes>
+      </BrowserRouter>
+      <footer>
+        <Footer />
+      </footer>
+    </body>
   </RecevoirProvider>
 );
