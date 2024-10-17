@@ -8,6 +8,7 @@ const utils = require("../backend/utils/utils");
 const scrapingDetection = require('./utils/scrapingDetection');
 const delayMiddleware = require('./utils/delayMiddleware');
 const rateLimit = require('express-rate-limit');
+const helmet = require("helmet");
 
 var indexRouter = require('./routes/index');
 
@@ -18,6 +19,12 @@ const url = process.env.SERVER_URL;
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
+
+app.use(helmet({
+  frameguard: { action: 'DENY' },
+}));
+
+app.use(helmet.hidePoweredBy({ setTo: "PHP 4.2.0" }));
 
 app.use(logger('dev'));
 app.use(express.json());
