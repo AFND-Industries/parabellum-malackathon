@@ -94,6 +94,7 @@ export default function RecevoirPage() {
 
     return (
         <div className="container">
+            <button className="btn btn-primary">Volver</button>
             <h1 className="text-center fw-bold">{recevoir.EMBALSE}</h1>
             <h2 className="text-center mb-5 fs-3">
                 Información sobre el embalse

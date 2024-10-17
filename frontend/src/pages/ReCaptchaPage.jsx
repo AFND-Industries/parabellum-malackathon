@@ -21,7 +21,7 @@ export default function ReCaptchaPage() {
         }
 
         try {
-            
+
             const res = await axios.post('http://malackathon.yellowbeavers.com:6998/submit', { 'g-recaptcha-response': captchaResponse });
             console.log(res.status)
             if (res.status === 200) {
@@ -38,13 +38,13 @@ export default function ReCaptchaPage() {
     };
 
     return (
-        <div className="captcha-page">
-            <h1>Verifica el CAPTCHA</h1>
+        <div className="captcha-page d-flex justify-content-center align-items-center flex-column">
+            <h1 className='mb-3 mt-5'>Verifica el CAPTCHA</h1>
             <ReCAPTCHA
                 sitekey="6LfoSWQqAAAAACE_fH2gZk6lrGlaO2RxHkdV_8Mg" // Reemplaza con tu clave pública
                 onChange={handleCaptchaChange}
             />
-            <button onClick={handleSubmit}>Verificar</button>
+            <button onClick={handleSubmit} className='btn btn-primary mt-3'>Verificar</button>
         </div>
     );
 }
