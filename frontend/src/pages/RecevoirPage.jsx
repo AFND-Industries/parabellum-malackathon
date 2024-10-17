@@ -2,9 +2,13 @@ import { useEffect, useState } from "react";
 import { useRecevoir } from "../context/RecevoirContext";
 import RecevoirChart from "../components/RecevoirChart";
 import MapComponent from "../components/MapComponent";
+import { useLocation } from "react-router-dom";
 
 export default function RecevoirPage() {
     const { getAguaFromEmbalses } = useRecevoir();
+
+    const location = useLocation();
+    const recevoir = location.state;
 
     const [aguas, setAguas] = useState(undefined);
     const [metrics, setMetrics] = useState({
@@ -19,31 +23,6 @@ export default function RecevoirPage() {
         },
         mean: 0
     });
-
-    const recevoir = {
-        "ID": 42,
-        "AMBITO_NOMBRE": "JÚCAR",
-        "EMBALSE_NOMBRE": "ULLDECONA",
-        "AGUA_TOTAL": 11,
-        "ELECTRICO_FLAG": false,
-        "ID_EMBALSE": 42,
-        "CODIGO": 8120011,
-        "NOMBRE": "ULLDECONA",
-        "EMBALSE": "Ulldecona Dam",
-        "X": 40.670915209,
-        "Y": 0.233962578000046,
-        "DEMARC": "JUCAR",
-        "CAUCE": "RIU DE LA SÉNIA",
-        "GOOGLE": null,
-        "OPENSTREETMAP": null,
-        "WIKIDATA": "https://www.wikidata.org/wiki/Q202052",
-        "PROVINCIA": "Castelló/Castellón",
-        "CCAA": "Comunitat Valenciana",
-        "TIPO": "Presa de fábrica de gravedad (hormigón vibrado)",
-        "COTA_CORON": "479.029999999999",
-        "ALT_CIMIEN": "58.6599999999999",
-        "INFORME": "https://sig.mapama.gob.es/WebServices/clientews/snczi/Default.aspx?nombre=EGISPE_PRESA&claves=ID_INFRAESTRUCTURA&valores=2266"
-    }
 
     function groupByYearAndSum(aguas) {
         return aguas.reduce((acc, agua) => {
@@ -110,42 +89,55 @@ export default function RecevoirPage() {
     }, []);
 
     return (
-        <div className="container my-5">
+        <div className="container">
+
+            <h1 className="text-center fw-bold">{recevoir.EMBALSE}</h1>
+            <h2 className="text-center mb-5 fs-3">
+                Información sobre el embalse
+            </h2>
+
             <div className="d-flex row g-3 mb-4 align-items-stretch">
-                <div className="col-md-7 d-flex flex-column text-center">
+                <div className="col-md-12 d-flex flex-column text-center">
                     <div className="info-card p-3 border rounded shadow-sm h-100">
-                        <h2 className="mb-3"><strong>{recevoir.EMBALSE}</strong></h2>
                         <div className="flex-grow-1">
                             <MapComponent latitude={recevoir.X} longitude={recevoir.Y} />
                         </div>
                     </div>
                 </div>
-                <div className="col-md-5">
+                <div className="col-md-12">
                     <div className="info-card p-3 border rounded shadow-sm h-100">
                         <h2 className="mb-3">Detalles del Embalse</h2>
-                        <p><strong>Tipo:</strong> {recevoir.TIPO}</p>
-                        <p><strong>Comunidad Autónoma:</strong> {recevoir.CCAA}</p>
-                        <p><strong>Provincia:</strong> {recevoir.PROVINCIA}</p>
-                        <p><strong>Ámbito:</strong> {recevoir.AMBITO_NOMBRE}</p>
-                        <p><strong>Cauce:</strong> {recevoir.CAUCE}</p>
-                        <p><strong>Capacidad del embalse:</strong> {recevoir.AGUA_TOTAL}</p>
+                        <div className="row">
+                            <div className="col-md-6">
+                                <p><strong>Tipo:</strong> {recevoir.TIPO}</p>
+                                <p><strong>Comunidad Autónoma:</strong> {recevoir.CCAA}</p>
+                                <p><strong>Provincia:</strong> {recevoir.PROVINCIA}</p>
+                            </div>
 
-                        <div className="mt-3">
-                            {recevoir.GOOGLE && (
-                                <a href={recevoir.GOOGLE} target="_blank" rel="noopener noreferrer" className="btn btn-primary me-2">
-                                    Google Maps
-                                </a>
-                            )}
-                            {recevoir.OPENSTREETMAP && (
-                                <a href={recevoir.OPENSTREETMAP} target="_blank" rel="noopener noreferrer" className="btn btn-primary me-2">
-                                    Open Street Map
-                                </a>
-                            )}
-                            {recevoir.INFORME && (
-                                <a href={recevoir.INFORME} target="_blank" rel="noopener noreferrer" className="btn btn-primary">
-                                    Informe
-                                </a>
-                            )}
+                            <div className="col-md-6">
+                                <p><strong>Ámbito:</strong> {recevoir.AMBITO_NOMBRE}</p>
+                                <p><strong>Cauce:</strong> {recevoir.CAUCE}</p>
+                                <p><strong>Capacidad del embalse:</strong> {recevoir.AGUA_TOTAL}</p>
+                            </div>
+                        </div>
+                        <div className="row">
+                            <div className="mt-3">
+                                {recevoir.GOOGLE && (
+                                    <a href={recevoir.GOOGLE} target="_blank" rel="noopener noreferrer" className="btn btn-secondary me-2">
+                                        Google
+                                    </a>
+                                )}
+                                {recevoir.OPENSTREETMAP && (
+                                    <a href={recevoir.OPENSTREETMAP} target="_blank" rel="noopener noreferrer" className="btn btn-secondary me-2">
+                                        Open Street Map
+                                    </a>
+                                )}
+                                {recevoir.INFORME && (
+                                    <a href={recevoir.INFORME} target="_blank" rel="noopener noreferrer" className="btn btn-secondary">
+                                        Ver informe
+                                    </a>
+                                )}
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -155,7 +147,7 @@ export default function RecevoirPage() {
 
             <div className="row mb-4" style={{ display: metrics.loaded ? "flex" : "none" }}>
                 <div className="col-md-4">
-                    <div className="card text-white bg-secondary mb-3">
+                    <div className="card text-white bg-success mb-3">
                         <div className="card-body">
                             <h5 className="card-title">Máximo nivel de agua ({metrics.max.date})</h5>
                             <p className="card-text">{metrics.max.value}</p>
@@ -163,7 +155,7 @@ export default function RecevoirPage() {
                     </div>
                 </div>
                 <div className="col-md-4">
-                    <div className="card text-white bg-secondary mb-3">
+                    <div className="card text-white bg-success mb-3">
                         <div className="card-body">
                             <h5 className="card-title">Mínimo nivel de agua ({metrics.min.date})</h5>
                             <p className="card-text">{metrics.min.value}</p>
@@ -171,7 +163,7 @@ export default function RecevoirPage() {
                     </div>
                 </div>
                 <div className="col-md-4">
-                    <div className="card text-white bg-secondary mb-3">
+                    <div className="card text-white bg-success mb-3">
                         <div className="card-body">
                             <h5 className="card-title">Nivel de agua medio</h5>
                             <p className="card-text">{metrics.mean.toFixed(2)}</p>

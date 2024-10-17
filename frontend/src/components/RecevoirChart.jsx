@@ -35,7 +35,7 @@ export default function RecevoirChart({ aguas }) {
             {
                 label: 'Agua por año',
                 data: datosFinales.map(item => item.aguaActual), // Agua actual en el eje Y
-                borderColor: '#8884d8',
+                borderColor: 'green',
                 backgroundColor: 'rgba(136, 132, 216, 0.2)',
                 fill: true,
             },
