@@ -10,10 +10,7 @@ export default function PrediccionChart({ prediccion }) {
 
     // Preparar los datos para Chart.js
     const chartData = {
-        labels: prediccion.map(item => {
-            const month = new Date(0, item.mes - 1).toLocaleString('es-ES', { month: 'long' });
-            return month.charAt(0).toUpperCase() + month.slice(1); // Capitalizar la primera letra
-        }), // Nombres de los meses
+        labels: prediccion.map(item => `Mes ${item.mes}`), // Etiquetas como "Mes 1", "Mes 2", etc.
         datasets: [
             {
                 label: 'Predicción Mensual',
