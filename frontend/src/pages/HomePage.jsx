@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { act, useState } from "react";
 import { MapContainer, TileLayer, Popup, Marker } from "react-leaflet";
 
 export default function HomePage(){
@@ -12,9 +12,7 @@ export default function HomePage(){
 
                 </div>
                 <div className="col-6">
-                    {
-
-                    }
+                    {"<mapa>"}
                     <div className="mb-3">
                         <label for="locationInput" className="form-label">Ubicación</label>
                         <input id="locationInput" className="form-control" type="search"></input>
@@ -26,8 +24,8 @@ export default function HomePage(){
                     }}>Usar mi ubicación</button>
                 </div>
                 <div className="col-12">
-
                 </div>
+                Ubicación seleccionada: {actualLocation}
             </div>
         </main>
     </>
