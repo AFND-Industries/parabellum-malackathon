@@ -3,7 +3,7 @@ const axios = require('axios');
 
 // Función para verificar el reCAPTCHA
 const verifyCaptcha = async (captchaToken) => {
-  const secretKey = process.env.RECAPTCHA_SECRET_KEY; // Asegúrate de que esta clave esté definida en tu archivo .env
+  const secretKey = "6LfoSWQqAAAAAPOu29WEbkwF3KRxTNVqXNmi-rI2"; // Asegúrate de que esta clave esté definida en tu archivo .env
 
   try {
     const response = await axios.post(
