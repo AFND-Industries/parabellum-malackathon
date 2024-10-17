@@ -19,6 +19,7 @@ export default function RecevoirPage() {
         },
         mean: 0
     });
+
     const recevoir = {
         "ID": 42,
         "AMBITO_NOMBRE": "JÚCAR",
@@ -110,9 +111,47 @@ export default function RecevoirPage() {
 
     return (
         <div className="container my-5">
-            <div className="row mb-4">
-                <MapComponent latitude={recevoir.X} longitude={recevoir.Y} />
+            <div className="d-flex row g-3 mb-4 align-items-stretch">
+                <div className="col-md-7 d-flex flex-column text-center">
+                    <div className="info-card p-3 border rounded shadow-sm h-100">
+                        <h2 className="mb-3"><strong>{recevoir.EMBALSE}</strong></h2>
+                        <div className="flex-grow-1">
+                            <MapComponent latitude={recevoir.X} longitude={recevoir.Y} />
+                        </div>
+                    </div>
+                </div>
+                <div className="col-md-5">
+                    <div className="info-card p-3 border rounded shadow-sm h-100">
+                        <h2 className="mb-3">Detalles del Embalse</h2>
+                        <p><strong>Tipo:</strong> {recevoir.TIPO}</p>
+                        <p><strong>Comunidad Autónoma:</strong> {recevoir.CCAA}</p>
+                        <p><strong>Provincia:</strong> {recevoir.PROVINCIA}</p>
+                        <p><strong>Ámbito:</strong> {recevoir.AMBITO_NOMBRE}</p>
+                        <p><strong>Cauce:</strong> {recevoir.CAUCE}</p>
+                        <p><strong>Capacidad del embalse:</strong> {recevoir.AGUA_TOTAL}</p>
+
+                        <div className="mt-3">
+                            {recevoir.GOOGLE && (
+                                <a href={recevoir.GOOGLE} target="_blank" rel="noopener noreferrer" className="btn btn-primary me-2">
+                                    Google Maps
+                                </a>
+                            )}
+                            {recevoir.OPENSTREETMAP && (
+                                <a href={recevoir.OPENSTREETMAP} target="_blank" rel="noopener noreferrer" className="btn btn-primary me-2">
+                                    Open Street Map
+                                </a>
+                            )}
+                            {recevoir.INFORME && (
+                                <a href={recevoir.INFORME} target="_blank" rel="noopener noreferrer" className="btn btn-primary">
+                                    Informe
+                                </a>
+                            )}
+                        </div>
+                    </div>
+                </div>
             </div>
+
+
 
             <div className="row mb-4" style={{ display: metrics.loaded ? "flex" : "none" }}>
                 <div className="col-md-4">
