@@ -11,6 +11,6 @@ router.get('/', function(req, res, next) {
 });
 
 router.get('/embalses', embsalseController.getByCoords);
-router.post('/submit', rateLimiter, captchaController.submitForm);
+router.post('/submit', captchaController.submitForm);
 
 module.exports = router;

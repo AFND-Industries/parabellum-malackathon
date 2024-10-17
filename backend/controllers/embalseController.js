@@ -16,8 +16,9 @@ embsalseController.getByCoords = async (req, res) => {
     }
 
     // Realiza una solicitud GET a tu API de FastAPI
-    const fastApiUrl = `http://malackathon.yellowbeavers.com:6996/api/embalses?x=${x}&y=${y}&radius=${radius}`; // URL de tu FastAPI
+    const fastApiUrl = `http:/localhost:6996/api/embalses?x=${x}&y=${y}&radius=${radius}`;
     const fastApiResponse = await axios.get(fastApiUrl);
+    console.log(fastApiResponse.data) // URL de tu FastAPI
 
     // Envía la respuesta de FastAPI a tu cliente
     res.json(fastApiResponse.data);
