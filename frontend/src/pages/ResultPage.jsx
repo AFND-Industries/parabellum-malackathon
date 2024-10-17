@@ -41,23 +41,75 @@ export default function ResultPage() {
             filterValue: hydroelectric,
             constraint: (value) => !hydroelectric || value.ELECTRICO_FLAG
         }
+        {
+            filterName: "name",
+            reachableName: "Nombre: ",
+            filterValue: name,
+            constraint: (value) => !name || name.length === 0 || value.EMBALSE.toLowerCase().includes(name.toLowerCase())
+        },
+        {
+            filterName: "capacity",
+            reachableName: "Capacidad mayor que ",
+            filterValue: capacity,
+            constraint: (value) => !capacity || Number(value.AGUA_TOTAL) >= capacity
+        },
+        {
+            filterName: "cuenca",
+            reachableName: "Cuenca: ",
+            filterValue: cuenca,
+            constraint: (value) => !cuenca || cuenca.length === 0 || value.AMBITO_NOMBRE.toLowerCase().includes(cuenca.toLowerCase())
+        },
+        {
+            filterName: "hydroelectric",
+            reachableName: "Tiene central hidroeléctrica",
+            filterValue: hydroelectric,
+            constraint: (value) => !hydroelectric || value.ELECTRICO_FLAG
+        }
     ]
 
     const applyFilters = () => {
         return recevoirs.filter((v) => filters.every((f) => f.constraint(v)));
     }
 
+    const [f, setF] = useState(undefined);
+    async function fase() {
+        console.log("asd");
+        try {
+            const recs = (await recContext.getEmbalses(latitude, longitude, radius)).data;
+
+            const updatedRecevoirs = await Promise.all(recs.map(async (recevoir) => {
+                try {
+                    const predicciones = (await recContext.getPrediccion(recevoir.ID)).data;
+
+                    // Calcular la media de las predicciones
+                    const media = predicciones.reduce((acumulador, item) => acumulador + item.prediccion, 0);
+                    console.log(media);
+                    // Añadir la media como un campo adicional al embalse
+                    return { ...recevoir, MEDIA_PREDICCION: media };
+                } catch (e) {
+                    console.error("Error al obtener la predicción para el embalse:", recevoir.ID);
+                    return { ...recevoir, MEDIA_PREDICCION: null };
+                }
+            }));
+            console.log(updatedRecevoirs);
+            setF(updatedRecevoirs);
+        } catch (e) {
+            setF(undefined);
+        }
+    }
+
+
     useEffect(() => {
         async function fetchData() {
             try {
-                const recs = (await recContext.getEmbalses(latitude, longitude, radius));
-                console.log(recs);
-                setRecevoirs(recs.data);
-            } catch (e) {
-                setRecevoirs([])
-            }
+                const recs = (await recContext.getEmbalses(latitude, longitude, radius)).data;
 
+                setRecevoirs(recs);
+            } catch (e) {
+                setRecevoirs([]);
+            }
         }
+
         if (!latitude || !longitude || !radius) navigate("/");
         else fetchData();
     }, [])
@@ -122,9 +174,8 @@ export default function ResultPage() {
 
                                 </div>
                             </div>
-                            {applyFilters().map(recevoir => <RecevoirItemComponent key={recevoir.ID} recevoir={recevoir} />)}
                         </div>
-                    </div>
-        }
-    </>
+            }
+        </>
+    );
 }

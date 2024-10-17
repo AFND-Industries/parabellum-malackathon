@@ -2,13 +2,15 @@ import { useEffect, useState } from "react";
 import { useRecevoir } from "../context/RecevoirContext";
 import RecevoirChart from "../components/RecevoirChart";
 import MapComponent from "../components/MapComponent";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 
 export default function RecevoirPage() {
     const { getAguaFromEmbalses, setShowPredict, showPredict } = useRecevoir();
 
     const location = useLocation();
-    const recevoir = location.state;
+    const navigate = useNavigate();
+    const recevoir = location.state.recevoir;
+    const radius = location.state.radius;
 
     const [aguas, setAguas] = useState(undefined);
     const [metrics, setMetrics] = useState({
@@ -92,9 +94,13 @@ export default function RecevoirPage() {
         setShowPredict(recevoir.ID);
     }
 
+    const volver = () => {
+        navigate("/result", { state: { latitude: recevoir.X, longitude: recevoir.Y, radius: radius } });
+    }
+
     return (
         <div className="container">
-            <button className="btn btn-primary">Volver</button>
+            <button className="btn btn-primary" onClick={volver}>Volver</button>
             <h1 className="text-center fw-bold">{recevoir.EMBALSE}</h1>
             <h2 className="text-center mb-5 fs-3">
                 Información sobre el embalse
