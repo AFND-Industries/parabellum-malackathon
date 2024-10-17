@@ -10,10 +10,10 @@ export default function ResultPage() {
 
     const navigate = useNavigate();
 
-    const [name, setName] = useState("c")
-    const [capacity, setCapacity] = useState(10)
+    const [name, setName] = useState(null)
+    const [capacity, setCapacity] = useState(null)
     const [hydroelectric, setHydroelectric] = useState(null)
-    const [cuenca, setCuenca] = useState("")
+    const [cuenca, setCuenca] = useState(null)
 
     const [recevoirs, setRecevoirs] = useState(null)
     const filters = [
