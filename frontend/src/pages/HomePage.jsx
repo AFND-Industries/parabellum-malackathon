@@ -1,17 +1,32 @@
+import { useState } from "react";
+import { MapContainer, TileLayer, Popup, Marker } from "react-leaflet";
+
 export default function HomePage(){
+
+    const [actualLocation, setActualLocation] = useState([36.715103,-4.477658]);
 
     return <>
         <main className="container">
             <div className="row g-3">
                 <div className="col-6">
-                    <button className="btn btn-primary w-100 h-100">
-                        Usar tu ubicación
-                    </button>
+
                 </div>
                 <div className="col-6">
-                    <button className="btn btn-outline-primary w-100">
-                        Seleccionar otra ubicación
-                    </button>
+                    {
+
+                    }
+                    <div className="mb-3">
+                        <label for="locationInput" className="form-label">Ubicación</label>
+                        <input id="locationInput" className="form-control" type="search"></input>
+                    </div>
+                    <button className="btn btn-primary" onClick={() => {
+                        navigator.geolocation.getCurrentPosition((position) => {
+                            setActualLocation([position.coords.latitude, position.coords.longitude])
+                        })
+                    }}>Usar mi ubicación</button>
+                </div>
+                <div className="col-12">
+
                 </div>
             </div>
         </main>
