@@ -1,10 +1,23 @@
 import { useEffect, useState } from "react";
-import { useRecevoir } from "../context/RecevoirContext"
+import { useRecevoir } from "../context/RecevoirContext";
+import RecevoirChart from "../components/RecevoirChart";
 
 export default function RecevoirPage() {
-    const { getEmbalses, getAguaFromEmbalses } = useRecevoir();
+    const { getAguaFromEmbalses } = useRecevoir();
 
     const [aguas, setAguas] = useState(undefined);
+    const [metrics, setMetrics] = useState({
+        loaded: false,
+        max: {
+            value: 0,
+            date: undefined,
+        },
+        min: {
+            value: 0,
+            date: undefined,
+        },
+        mean: 0
+    });
     const recevoir = {
         "ID": 42,
         "AMBITO_NOMBRE": "JÚCAR",
@@ -30,25 +43,103 @@ export default function RecevoirPage() {
         "INFORME": "https://sig.mapama.gob.es/WebServices/clientews/snczi/Default.aspx?nombre=EGISPE_PRESA&claves=ID_INFRAESTRUCTURA&valores=2266"
     }
 
+    function groupByYearAndSum(aguas) {
+        return aguas.reduce((acc, agua) => {
+            const year = new Date(agua.FECHA).getFullYear();
+            if (!acc[year]) {
+                acc[year] = { total: 0, count: 0 };
+            }
+            acc[year].total += agua.AGUA_ACTUAL; // Sumar el nivel de agua
+            acc[year].count += 1; // Contar las lecturas
+            return acc;
+        }, {});
+    }
 
+    function getMaximo(aguas) {
+        const grouped = groupByYearAndSum(aguas);
+        let max = { value: -Infinity, date: undefined };
+
+        for (const year in grouped) {
+            if (grouped[year].total > max.value) {
+                max = { value: grouped[year].total, date: year };
+            }
+        }
+        return max;
+    }
+
+    function getMinimo(aguas) {
+        const grouped = groupByYearAndSum(aguas);
+        let min = { value: Infinity, date: undefined };
+
+        for (const year in grouped) {
+            if (grouped[year].total < min.value) {
+                min = { value: grouped[year].total, date: year };
+            }
+        }
+        return min;
+    }
+
+    function getMedia(aguas) {
+        const grouped = groupByYearAndSum(aguas);
+        const totalSuma = Object.values(grouped).reduce((acc, yearData) => acc + yearData.total, 0);
+        const totalCount = Object.keys(grouped).length;
+        return totalCount ? totalSuma / totalCount : 0; // Evitar división por cero
+    }
 
     useEffect(() => {
-        async function perita() {
+        async function fetch() {
             const aguas_request = await getAguaFromEmbalses(recevoir.ID);
             const aguas = aguas_request.data;
 
+            const max = getMaximo(aguas);
+            const min = getMinimo(aguas);
+            const mean = getMedia(aguas);
+
             setAguas(aguas);
+            setMetrics({
+                loaded: true,
+                max: max,
+                min: min,
+                mean: mean
+            });
         }
-        perita();
+
+        fetch();
     }, []);
 
-    useEffect(() => {
-        console.log(aguas);
-    }, [aguas]);
-
     return (
-        <div className="d-flex justify-content-center align-items-center">
-            <h1>Embalses</h1>
+        <div className="container my-5">
+            <div className="row mb-4" style={{ display: metrics.loaded ? "flex" : "none" }}>
+                <div className="col-md-4">
+                    <div className="card text-white bg-secondary mb-3">
+                        <div className="card-body">
+                            <h5 className="card-title">Máximo nivel de agua ({metrics.max.date})</h5>
+                            <p className="card-text">{metrics.max.value}</p>
+                        </div>
+                    </div>
+                </div>
+                <div className="col-md-4">
+                    <div className="card text-white bg-secondary mb-3">
+                        <div className="card-body">
+                            <h5 className="card-title">Mínimo nivel de agua ({metrics.min.date})</h5>
+                            <p className="card-text">{metrics.min.value}</p>
+                        </div>
+                    </div>
+                </div>
+                <div className="col-md-4">
+                    <div className="card text-white bg-secondary mb-3">
+                        <div className="card-body">
+                            <h5 className="card-title">Nivel de agua medio</h5>
+                            <p className="card-text">{metrics.mean.toFixed(2)}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div className="d-flex justify-content-center align-items-start flex-column">
+                <h2>Evolución del agua</h2>
+                <RecevoirChart aguas={aguas} />
+            </div>
         </div>
-    )
+    );
 }
