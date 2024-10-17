@@ -11,13 +11,20 @@ import { RecevoirProvider } from "./context/RecevoirContext.jsx";
 
 createRoot(document.getElementById("root")).render(
   <RecevoirProvider>
-    <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<HomePage />} />
-        <Route path="/result" element={<ResultPage />} />
-        <Route path="/recevoir" element={<RecevoirPage />} />
-      </Routes>
-    </BrowserRouter>
-    <Footer />
+    <body className="app-container">
+      <header>
+        <HeaderPage />
+      </header>
+      <BrowserRouter>
+        <Routes>
+          <Route path="/" element={<HomePage />} />
+          <Route path="/result" element={<ResultPage />} />
+          <Route path="/recevoir" element={<RecevoirPage />} />
+        </Routes>
+      </BrowserRouter>
+      <footer>
+        <Footer />
+      </footer>
+    </body>
   </RecevoirProvider>
 );

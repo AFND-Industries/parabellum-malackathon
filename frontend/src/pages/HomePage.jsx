@@ -1,12 +1,10 @@
 import { act, useState } from "react";
-import { MapContainer, TileLayer, Popup, Marker } from "react-leaflet";
 import HeaderPage from "../components/HeaderComponent.jsx";
 export default function HomePage() {
   const [actualLocation, setActualLocation] = useState([36.715103, -4.477658]);
 
   return (
     <>
-      <HeaderPage />
       <main className="container">
         <div className="row g-3">
           <div className="col-6">{"<mapa>"}</div>

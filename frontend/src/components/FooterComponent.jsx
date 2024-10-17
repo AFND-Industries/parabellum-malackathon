@@ -1,6 +1,11 @@
-export default function Footer(){
-
-    return <footer className="py-3 text-center">
-        <h6>Hecho para la Malackathon 2024 por el grupo <i><b>Para Bellum</b></i></h6>
-    </footer>
+import "./footer.css";
+export default function Footer() {
+  return (
+    <div className="py-1 text-center">
+      <h1 className="fs-6 text-white">Malackathon-2024</h1>
+      <i>
+        <b className="text-light">Para Bellum ⚔</b>
+      </i>
+    </div>
+  );
 }

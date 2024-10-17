@@ -3,3 +3,13 @@
 * {
     font-family: 'Inter', var(--bs-font-sans-serif);
 }
+
+body{
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+footer{
+  margin-top: auto;
+}
+ 
