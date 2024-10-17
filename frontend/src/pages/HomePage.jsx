@@ -51,6 +51,9 @@ export default function HomePage() {
     return (
         <>
             <main className="container">
+                <div className="container text-center">
+                    <h1 className="fw-bold"></h1>
+                </div>
                 <div className="row g-3">
                     <div className="col-6">
                         <MapComponent key={mapKey} latitude={actualLocation[0]} longitude={actualLocation[1]} />
