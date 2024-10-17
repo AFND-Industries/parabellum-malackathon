@@ -1,5 +1,6 @@
 
-import { act, useState } from "react";
+
+import { act, useState, useEffect } from "react";
 import { MapContainer, TileLayer, Popup, Marker } from "react-leaflet";
 import HeaderPage from "../components/HeaderComponent";
 import { useNavigate } from "react-router-dom";
@@ -9,8 +10,37 @@ export default function HomePage() {
     const [actualLocation, setActualLocation] = useState([36.715103, -4.477658]);
     const [inputMethod, setInputMethod] = useState("name");
     const [radio, setRadio] = useState(100);
+    const [refreshCount, setRefreshCount] = useState(0);
 
     const navigate = useNavigate()
+
+    useEffect(() => {
+        // Detección de webdriver
+        if (navigator.webdriver) {
+            alert("Acceso denegado: posible scraping detectado.");
+            navigate('/recaptcha'); // Cambia a la ruta que desees
+        }
+
+        const refreshCount = localStorage.getItem('refreshCount') || 0;
+
+        // Si el número de recargas excede 5, redirigir al CAPTCHA
+        if (refreshCount >= 3) {
+            navigate('/recaptcha'); // Cambia esto a tu ruta de CAPTCHA
+        } else {
+            // Incrementar el contador de recargas
+            localStorage.setItem('refreshCount', parseInt(refreshCount) + 1);
+        }
+
+        // Reiniciar el contador después de 10 segundos
+        const resetRefreshCount = () => {
+            localStorage.setItem('refreshCount', 0);
+        };
+        const timer = setTimeout(resetRefreshCount, 10000); // 10000 ms = 10 segundos
+
+        return () => {
+            clearTimeout(timer); // Limpiar el temporizador
+        };
+    }, [navigate]);
 
     return <>
         <main className="container">

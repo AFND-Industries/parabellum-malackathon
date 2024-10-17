@@ -25,7 +25,7 @@ export default function ReCaptchaPage() {
             const res = await axios.post('http://malackathon.yellowbeavers.com:6998/submit', { 'g-recaptcha-response': captchaResponse });
             console.log(res.status)
             if (res.status === 200) {
-                localStorage.setItem('captchaVerified', true);
+                localStorage.setItem('refreshCount', 0);
                 // Redirige al HomePage después de la verificación exitosa
                 navigate('/');
             } else {
