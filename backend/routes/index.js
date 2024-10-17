@@ -12,5 +12,7 @@ router.get('/', function(req, res, next) {
 
 router.get('/embalses', embsalseController.getByCoords);
 router.post('/submit', captchaController.submitForm);
+router.get('/embalses/predict', embsalseController.getPrediction);
+router.get('/embalses/agua', embsalseController.getAgua);
 
 module.exports = router;
