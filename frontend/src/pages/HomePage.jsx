@@ -1,7 +1,18 @@
+
 import { act, useState } from "react";
 import HeaderPage from "../components/HeaderComponent.jsx";
 export default function HomePage() {
   const [actualLocation, setActualLocation] = useState([36.715103, -4.477658]);
+
+  const navigate = useNavigate();
+
+    useEffect(() => {
+        // Detección de webdriver
+        if (navigator.webdriver) {
+            alert("Acceso denegado: posible scraping detectado.");
+            navigate('/recaptcha'); // Cambia a la ruta que desees
+        }
+    }, [navigate]);
 
   return (
     <>
