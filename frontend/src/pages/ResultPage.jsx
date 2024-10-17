@@ -47,95 +47,132 @@ export default function ResultPage() {
         return recevoirs.filter((v) => filters.every((f) => f.constraint(v)));
     }
 
+    const [f, setF] = useState(undefined);
+    async function fase() {
+        console.log("asd");
+        try {
+            const recs = (await recContext.getEmbalses(latitude, longitude, radius)).data;
+
+            const updatedRecevoirs = await Promise.all(recs.map(async (recevoir) => {
+                try {
+                    const predicciones = (await recContext.getPrediccion(recevoir.ID)).data;
+
+                    // Calcular la media de las predicciones
+                    const media = predicciones.reduce((acumulador, item) => acumulador + item.prediccion, 0);
+                    console.log(media);
+                    // Añadir la media como un campo adicional al embalse
+                    return { ...recevoir, MEDIA_PREDICCION: media };
+                } catch (e) {
+                    console.error("Error al obtener la predicción para el embalse:", recevoir.ID);
+                    return { ...recevoir, MEDIA_PREDICCION: null };
+                }
+            }));
+            console.log(updatedRecevoirs);
+            setF(updatedRecevoirs);
+        } catch (e) {
+            setF(undefined);
+        }
+    }
+
+
     useEffect(() => {
         async function fetchData() {
             try {
-                const recs = (await recContext.getEmbalses(latitude, longitude, radius));
-                console.log(recs);
-                setRecevoirs(recs.data);
-            } catch (e) {
-                setRecevoirs([])
-            }
+                const recs = (await recContext.getEmbalses(latitude, longitude, radius)).data;
 
+                setRecevoirs(recs);
+            } catch (e) {
+                setRecevoirs([]);
+            }
         }
+
         if (!latitude || !longitude || !radius) navigate("/");
         else fetchData();
-    }, [])
+    }, [latitude, longitude, radius, navigate, recContext]);
 
     const volver = () => {
         navigate("/");
     }
+    console.log(f);
+    const mayor = f === undefined ? undefined : f.reduce((max, current) => {
+        return current.MEDIA_PREDICCION > max.MEDIA_PREDICCION ? current : max;
+    }, f[0]);
 
+    // Encontrar el elemento con la menor MEDIA_PREDICCION
+    const menor = f === undefined ? undefined : f.reduce((min, current) => {
+        return current.MEDIA_PREDICCION < min.MEDIA_PREDICCION ? current : min;
+    }, f[0]);
 
-    return <>
-
-        {
-            recevoirs === null ?
-                <div className="text-center">
-                    <span className="fw-bold">Cargando embalses</span><br></br>
-                    <div className="spinner-grow" role="status"></div>
-                </div>
-                :
-                recevoirs.length === 0 ?
-                    <>
+    return (
+        <>
+            {
+                recevoirs === null ?
+                    <div className="text-center">
+                        <span className="fw-bold">Cargando embalses</span><br></br>
+                        <div className="spinner-grow" role="status"></div>
+                    </div>
+                    :
+                    recevoirs.length === 0 ?
+                        <>
+                            <div className="container">
+                                <button className="btn btn-primary" onClick={volver}>Volver</button>
+                                <div className="text-center">
+                                    <h3>No se han encontrado embalses a {radius}km</h3>
+                                </div>
+                            </div>
+                        </>
+                        :
                         <div className="container">
                             <button className="btn btn-primary" onClick={volver}>Volver</button>
-                            <div className="text-center">
-                                <h3>No se han encontrado embalses a {radius}km</h3>
-                            </div>
-                        </div>
-
-                    </>
-                    :
-                    <div className="container">
-                        <button className="btn btn-primary" onClick={volver}>Volver</button>
-                        <div className="row g-3">
-
-                            <div className="col-12 text-center">
-                                <h3>Aquí tienes algunos embalses a {radius}km de distancia</h3>
-                            </div>
-                            <div className="col-12">
-                                <div className="card">
-                                    <div className="card-header">
-                                        Filtros utilizados
-                                    </div>
-                                    <div className="card-body d-flex">
-                                        {filters.map((f) => {
-                                            return <div>
-                                                <span class="badge rounded-pill text-bg-primary me-2">{f.reachableName}
-                                                    {
-                                                        f.filterName === "hydroelectric" ?
-                                                            <input id={f.filterName + "Input"} type="checkbox" onChange={() => { setHydroelectric(!hydroelectric) }} className="form-check-input ms-2" checked={f.filterValue} />
-                                                            :
-                                                            <input id={f.filterName + "Input"} onChange={(v) => {
-                                                                switch (f.filterName) {
-                                                                    case "name":
-                                                                        setName(v.target.value)
-                                                                        break;
-                                                                    case "capacity":
-                                                                        setCapacity(v.target.valueAsNumber)
-                                                                        break;
-                                                                    case "cuenca":
-                                                                        setCuenca(v.target.value)
-                                                                        break;
-
-                                                                    default:
-                                                                        break;
-                                                                }
-                                                            }} type={f.filterName === "capacity" ? "number" : "text"} min={f.filterName === "capacity" ? 0 : ""} style={{ maxWidth: "50px", border: "none", borderRadius: "5px" }} value={f.filterValue} />
-                                                    }
-                                                </span>
-                                            </div>
-                                        })}
+                            <div className="row g-3">
+                                <div className="col-12 text-center">
+                                    <h3>Aquí tienes algunos embalses a {radius}km de distancia</h3>
+                                </div>
+                                <div className="col-12">
+                                    <div className="card">
+                                        <div className="card-header">
+                                            Filtros utilizados
+                                        </div>
+                                        <div className="card-body d-flex">
+                                            {filters.map((f) => {
+                                                return <div key={f.filterName}>
+                                                    <span className="badge rounded-pill text-bg-primary me-2">{f.reachableName}
+                                                        {
+                                                            f.filterName === "hydroelectric" ?
+                                                                <input id={f.filterName + "Input"} type="checkbox" onChange={() => { setHydroelectric(!hydroelectric) }} className="form-check-input ms-2" checked={f.filterValue} />
+                                                                :
+                                                                <input id={f.filterName + "Input"} onChange={(v) => {
+                                                                    switch (f.filterName) {
+                                                                        case "name":
+                                                                            setName(v.target.value)
+                                                                            break;
+                                                                        case "capacity":
+                                                                            setCapacity(v.target.valueAsNumber)
+                                                                            break;
+                                                                        case "cuenca":
+                                                                            setCuenca(v.target.value)
+                                                                            break;
+                                                                        default:
+                                                                            break;
+                                                                    }
+                                                                }} type={f.filterName === "capacity" ? "number" : "text"} min={f.filterName === "capacity" ? 0 : ""} style={{ maxWidth: "50px", border: "none", borderRadius: "5px" }} value={f.filterValue} />
+                                                        }
+                                                    </span>
+                                                </div>
+                                            })}
+                                        </div>
                                     </div>
                                 </div>
-                                <div className="d-flex">
-
+                                {applyFilters().map(recevoir => <RecevoirItemComponent key={recevoir.ID} radius={radius} recevoir={recevoir} />)}
+                                <div style={{ display: "none" }}>
+                                    <button className="btn btn-primary" onClick={fase}>Fase 5</button>
+                                    {f && <div>
+                                        {mayor} le pasa agua a {menor}
+                                    </div>}
                                 </div>
                             </div>
-                            {applyFilters().map(recevoir => <RecevoirItemComponent key={recevoir.ID} radius={radius} recevoir={recevoir} />)}
                         </div>
-                    </div>
-        }
-    </>
+            }
+        </>
+    );
 }
