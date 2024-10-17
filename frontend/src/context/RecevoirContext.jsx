@@ -2,7 +2,7 @@ import { createContext, useContext, useEffect, useState } from "react"
 import axios from "axios";
 
 const RecevoirContext = createContext(null);
-const SERVER_URL = "http://malackathon.yellowbeavers.com:6996"; // CAMBIAR A LOCALHOST EN EL SV
+const SERVER_URL = "http://malackathon.yellowbeavers.com:6998"; // CAMBIAR A LOCALHOST EN EL SV
 
 export const RecevoirProvider = ({ children }) => {
 
