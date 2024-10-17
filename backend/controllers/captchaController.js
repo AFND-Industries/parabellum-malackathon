@@ -11,8 +11,9 @@ exports.submitForm = async (req, res) => {
     const captchaValid = await verifyCaptcha(captchaToken);
     
     if (captchaValid) {
+      
       // Procesar la solicitud si el CAPTCHA es válido
-      res.status(200).send('Formulario enviado con éxito.');
+      res.status(200).send('Captcha verificado exitosamente.');
     } else {
       res.status(403).send('Error de CAPTCHA.');
     }
