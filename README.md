@@ -1,4 +1,4 @@
 # Malackathon
 
-This repository is for the code and documentation we will develop on **Malackathon**, made by the Parabellum Group.
-
+Este repositorio es para el código y la documentación que desarrollaremos en Malackathon, realizado por el Grupo Parabellum.
+ES MUY IMPORTANTE LEER EL DOCUMENTO CON TODA LA INFO EN /docs
