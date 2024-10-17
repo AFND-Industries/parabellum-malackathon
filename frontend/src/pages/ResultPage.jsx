@@ -48,8 +48,10 @@ export default function ResultPage() {
     }
 
     const [f, setF] = useState(undefined);
+    const [a, setA] = useState(false);
     async function fase() {
         console.log("asd");
+        setA(true);
         try {
             const recs = (await recContext.getEmbalses(latitude, longitude, radius)).data;
 
@@ -72,6 +74,7 @@ export default function ResultPage() {
         } catch (e) {
             setF(undefined);
         }
+        setA(false);
     }
 
 
@@ -170,6 +173,7 @@ export default function ResultPage() {
                                 {applyFilters().map(recevoir => <RecevoirItemComponent key={recevoir.ID} radius={radius} recevoir={recevoir} />)}
                                 <div className="d-flex justify-content-center align-items-center flex-column">
                                     <button className="btn btn-primary mb-2" onClick={fase}>Calcular trasvase</button>
+                                    {a && !f && <div className="spinner-grow" role="status"></div>}
                                     {f && <div>
                                         {mayor.EMBALSE} le pasa agua a {menor.EMBALSE_NOMBRE}
                                     </div>}
