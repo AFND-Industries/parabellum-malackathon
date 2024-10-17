@@ -9,10 +9,10 @@ export default function HomePage(){
         <main className="container">
             <div className="row g-3">
                 <div className="col-6">
-
+                {"<mapa>"}
                 </div>
                 <div className="col-6">
-                    {"<mapa>"}
+                    
                     <div className="mb-3">
                         <label for="locationInput" className="form-label">Ubicación</label>
                         <input id="locationInput" className="form-control" type="search"></input>
